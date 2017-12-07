@@ -1,0 +1,121 @@
+ # Step 1:
+ - command: php artisan make:auth
+ - Connect database
+ 	- DB name: project_two
+
+# Step 2:
+- Go to migration directory
+	- create_users_table.php
+		public function up()
+	    {
+	        Schema::create('users', function (Blueprint $table) {
+	            $table->increments('id');
+	            $table->string('name');
+	            $table->string('email')->unique();
+	            $table->string('password');
+	            $table->rememberToken();
+	            $table->timestamps();
+	        });
+	    }
+
+	    /**
+	     * Reverse the migrations.
+	     *
+	     * @return void
+	     */
+	    public function down()
+	    {
+	        Schema::dropIfExists('users');
+	    }
+
+	    Note: -here up() function create table and down() function drop table
+
+# Step 3:
+ web.php
+	<?php
+
+	Route::get('/', function () {
+	    return view('welcome');
+	});
+
+	Auth::routes();
+
+	Route::get('/home', 'HomeController@index')->name('home');
+
+	Note: 
+		- Here Route::get('/'), Route class path
+			-vendor/laravel/framework/src/lluminate/Routing/Route.php
+			- Auth::routes();
+				 public function auth()
+			    {
+			        // Authentication Routes...
+			        $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
+			        $this->post('login', 'Auth\LoginController@login');
+			        $this->post('logout', 'Auth\LoginController@logout')->name('logout');
+
+			        // Registration Routes...
+			        $this->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+			        $this->post('register', 'Auth\RegisterController@register');
+
+			        // Password Reset Routes...
+			        $this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+			        $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+			        $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+			        $this->post('password/reset', 'Auth\ResetPasswordController@reset');
+			    }
+# Step 4:
+- Now goto app/Http/Controllers/Auth/LoginController.php
+	- Here you can see a trait name "use AuthenticatesUsers"
+		- trait is a class like Interface. But we can use this everywhere by calling inside a class by use "use AuthenticatesUsers".
+		- For more info check the Directory Trait.
+
+	- Now press Ctrl+Right Click you can find showLoginForm()
+	 - 
+		public function showLoginForm()
+	    {
+	        return view('auth.login');
+	    }
+
+
+# Important Note:
+- In Controller we have to use query to manage database
+	- For this we have use Query Builder and Eloquent ORM
+
+
+
+Step 5:
+- By default in AuthenticatesUsers.php class has
+	public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    - Now we have to write 
+    public function showLoginForm()
+    {
+        return view('admin.login.login');
+    }
+
+
+Step 6:
+- 	public function login(Request $request)
+    {
+        $this->validateLogin($request);
+    
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        if ($this->attemptLogin($request)) {
+            return $this->sendLoginResponse($request);
+        }
+
+      
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
+    Note: Here Request is a class, it handel the form data
