@@ -1,0 +1,74 @@
+# Step 1:
+- Connect the link
+<link href="{{asset('/')}}admin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+# Step 2:
+- views/admin/login/login.blade.php
+
+	 <form role="form" method="POST" action="{{ route('login') }}">
+        {{csrf_field()}}
+        <fieldset>
+            <div class="form-group">
+                <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+            </div>
+            <div class="form-group">
+                <input class="form-control" placeholder="Password" name="password" type="password">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input name="remember" type="checkbox" value="Remember Me">Remember Me
+                </label>
+            </div>
+            <!-- Change this to a button or input when using this as a form -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-lg btn-success btn-block">
+                    Login
+                </button>
+
+            </div>
+
+
+        </fieldset>
+    </form>
+
+
+
+# Step 4:
+- HomeController.php
+    public function index()
+    {
+        return view('admin.home.home');
+    }
+
+# Step 5:
+- AuthenticatesUsers.php
+	public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return redirect('/login');
+    }
+
+
+Step 6:
+
+- master.blade.php
+<li>
+    <a href="" onclick="event.preventDefault(); document.getElementById('bitm').submit();">
+        <i class="fa fa-sign-out fa-fw"></i> Logout
+    </a>
+    <form action="{{ route('logout') }}" method="POST" id="bitm">
+        {{ csrf_field() }}
+    </form>
+</li>
+
+
+
+
+
+
+
+
+
