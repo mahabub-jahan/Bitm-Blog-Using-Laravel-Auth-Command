@@ -38,71 +38,53 @@ class CategoryController extends Controller
     }
 
 
-
-
-
-
-
-
-
-    public function create()
-    {
-        //
+    public function manageCategoryInfo(){
+//        $categories = Category::all();
+        $categories = Category::orderBy('id', 'desc')->get();
+        return view('admin.category.manage-category',compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function unpublishedCategoryInfo($data){
+        $categoryById = Category::find($data);
+        $categoryById->publication_status = 0;
+        $categoryById->save();
+
+        return redirect('/category/manage-category')->with('message','Category info unpublished');
+
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function publishedCategoryInfo($data){
+            $categoryById = Category::find($data);
+            $categoryById->publication_status = 1;
+            $categoryById->save();
+
+            return redirect('/category/manage-category')->with('message','Category info published');
+
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+
+    public function editCategoryInfo($id)
     {
-        //
+        $category = Category::find($id);
+        return view('admin.category.edit-category',compact('category'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+
+    public function updateCategoryInfo(Request $request, $id){
+       $categoryById = Category::find($id);
+       $categoryById->category_name = $request->category_name;
+       $categoryById->category_description = $request->category_description;
+       $categoryById->publication_status = $request->publication_status;
+       $categoryById->save();
+        return redirect('/category/manage-category')->with('message','Category Update Successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function deleteCategoryInfo($id)
     {
-        //
+        $categoryById = Category::find($id);
+        $categoryById->delete();
+        return redirect('/category/manage-category')->with('destroy','Category Delete Successfully');
     }
 }

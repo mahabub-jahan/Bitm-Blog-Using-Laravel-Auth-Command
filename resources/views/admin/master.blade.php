@@ -82,8 +82,22 @@
 <script src="{{asset('/')}}admin/vendor/morrisjs/morris.min.js"></script>
 <script src="{{asset('/')}}admin/data/morris-data.js"></script>
 
+<!-- DataTables JavaScript -->
+<script src="{{asset('/')}}admin/vendor/datatables/js/jquery.dataTables.min.js"></script>
+<script src="{{asset('/')}}admin/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+<script src="{{asset('/')}}admin/vendor/datatables-responsive/dataTables.responsive.js"></script>
+
 <!-- Custom Theme JavaScript -->
 <script src="{{asset('/')}}admin/dist/js/sb-admin-2.js"></script>
+<!-- Page-Level Demo Scripts - Tables - Use for reference -->
+<script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+            responsive: true
+        });
+    });
+</script>
+
 
 </body>
 

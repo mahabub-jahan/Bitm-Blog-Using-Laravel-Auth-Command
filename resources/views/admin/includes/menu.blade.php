@@ -22,7 +22,7 @@
                         <a href="{{ url('/category/add-category') }}">Add Category</a>
                     </li>
                     <li>
-                        <a href="">Manage Category</a>
+                        <a href="{{ url('/category/manage-category') }}">Manage Category</a>
                     </li>
                 </ul>
                 <!-- /.nav-second-level -->
